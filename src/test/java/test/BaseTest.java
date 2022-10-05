@@ -9,7 +9,7 @@ public class BaseTest {
     protected WebDriver driver;
 
     // Инициализируем драйвер и указываем, какой использовать: ChromeDriver() или FirefoxDriver()
-    public void setUp
+    public void setUp() {
         driver = new ChromeDriver();
     }
 
