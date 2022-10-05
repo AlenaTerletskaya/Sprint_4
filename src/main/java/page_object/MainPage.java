@@ -4,6 +4,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 // Создаем класс главной страницы MainPage
 public class MainPage {
@@ -60,6 +62,84 @@ public class MainPage {
         driver.get(pageURL);
     }
 
+    // Метод скроллит страницу до вопросов о важном
+    public void scrollToImportantQuestions() {
+        WebElement ImportantQuestions = driver.findElement(IMPORTANT_QUESTIONS);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", ImportantQuestions);
+    }
+
+    // Метод кликает на вопрос
+    public void clickQuestion(String question) {
+        // Определяем локатор вопроса
+        By questionLocator;
+        if (question.equals("вопрос о цене и оплате")) {
+            questionLocator = PRICE_AND_PAYMENT_QUESTION;
+        } else if (question.equals("вопрос о нескольких самокатах")) {
+            questionLocator = MULTIPLE_SCHOOTERS_QUESTION;
+        } else if (question.equals("вопрос о времени аренды")) {
+            questionLocator = RENTAL_TIME_QUESTION;
+        } else if (question.equals("вопрос о заказе самоката сегодня")) {
+            questionLocator = ORDER_SCHOOTER_TODAY_QUESTION;
+        } else if (question.equals("вопрос о продлении или возврате")) {
+            questionLocator = EXTENSION_OR_RETURN_QUESTION;
+        } else if (question.equals("вопрос о зарядке самоката")) {
+            questionLocator = SCHOOTER_CHARGING_QUESTION;
+        } else if (question.equals("вопрос об отмене заказа")) {
+            questionLocator = CANCEL_ORDER_QUESTION;
+        }  else if (question.equals("вопрос о доставке за МКАД")) {
+            questionLocator = DELIVERY_OUTSIDE_MOSCOW_QUESTION;
+        } else {
+            System.out.println("Error: The MainPage.clickQuestion method is missing a locator that matches the question");
+            questionLocator = By.xpath("");
+        }
+        if (!questionLocator.equals(By.xpath(""))) {
+            // Находим вопрос по локатору
+            WebElement guestionElement = driver.findElement(questionLocator);
+            // Скроллим страницу до вопроса
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", guestionElement);
+            // Ожидаем, что вопрос станет кликабельным;
+            waitElementToBeClicable(guestionElement);
+            // Кликаем на вопрос
+            guestionElement.click();
+        }
+    }
+
+    // Метод проверяет, отображается ли ответ на вопрос
+    public boolean isAnswerDisplayed(String question) {
+        // Определяем локатор ответа
+        By answerLocator;
+        if (question.equals("вопрос о цене и оплате")) {
+            answerLocator = PRICE_AND_PAYMENT_TEXT;
+        } else if (question.equals("вопрос о нескольких самокатах")) {
+            answerLocator = MULTIPLE_SCHOOTERS_TEXT;
+        } else if (question.equals("вопрос о времени аренды")) {
+            answerLocator = RENTAL_TIME_TEXT;
+        } else if (question.equals("вопрос о заказе самоката сегодня")) {
+            answerLocator = ORDER_SCHOOTER_TODAY_TEXT;
+        } else if (question.equals("вопрос о продлении или возврате")) {
+            answerLocator = EXTENSION_OR_RETURN_TEXT;
+        } else if (question.equals("вопрос о зарядке самоката")) {
+            answerLocator = SCHOOTER_CHARGING_TEXT;
+        } else if (question.equals("вопрос об отмене заказа")) {
+            answerLocator = CANCEL_ORDER_TEXT;
+        }  else if (question.equals("вопрос о доставке за МКАД")) {
+            answerLocator = DELIVERY_OUTSIDE_MOSCOW_TEXT;
+        } else {
+            System.out.println
+                    ("Error: MainPage.clickQuestion method is missing an answer locator that matches the question");
+            answerLocator = By.xpath("");
+        }
+        if (!answerLocator.equals(By.xpath(""))) {
+            // Находим ответ по локатору
+            WebElement answerElement = driver.findElement(answerLocator);
+            // Ожидаем, что ответ станет кликабельным;
+            waitElementToBeClicable(answerElement);
+            return answerElement.isDisplayed();
+        } else {
+            return false;
+        }
+    }
+
     // Метод кликает по вопросу о цене и оплате
     public void clickPriceAndPaymentQuestion() {
         driver.findElement(PRICE_AND_PAYMENT_QUESTION).click();
@@ -68,12 +148,6 @@ public class MainPage {
     // Метод проверяет, отображается ли текст о цене и оплате
     public boolean isPriceAndPaymentTextDisplayed() {
         return driver.findElement(PRICE_AND_PAYMENT_TEXT).isDisplayed();
-    }
-
-    // Метод скроллит страницу до вопросов о важном
-    public void scrollToImportantQuestions() {
-        WebElement ImportantQuestions = driver.findElement(IMPORTANT_QUESTIONS);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", ImportantQuestions);
     }
 
     // Метод кликает по вопросу о нескольких самокатах
@@ -151,11 +225,19 @@ public class MainPage {
         if (orderButton.equals("верхняя кнопка заказа")) {
             driver.findElement(UPPER_ORDER_BUTTON).click();
         } else if (orderButton.equals("нижняя кнопка заказа")) {
+            // Скроллим до кнопки
             WebElement lowerOrderButton = driver.findElement(LOWER_ORDER_BUTTON);
             ((JavascriptExecutor)driver).
                     executeScript("arguments[0].scrollIntoView();", lowerOrderButton);
+            waitElementToBeClicable(lowerOrderButton); // Явное ожидание кликабельности кнопки
             lowerOrderButton.click();
         }
+    }
+
+    // Явное ожидание кликабельности элемента
+    public void waitElementToBeClicable(WebElement element) {
+        new WebDriverWait(driver, 3)
+                .until(ExpectedConditions.elementToBeClickable(element));
     }
 
 }

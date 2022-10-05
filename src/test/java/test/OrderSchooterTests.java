@@ -1,4 +1,4 @@
-package tests;
+package test;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -24,7 +24,7 @@ public class OrderSchooterTests extends BaseTest {
     private final String rentalPeriod; // Период аренды из выпадающего меню
     private final String colour; // Цвет самоката
     private final String comment; // Комментарий
-    private boolean actualResult; // Ожидаемый результат
+    private boolean actual; // Ожидаемый результат
 
     // Конструктор с параметрами
     public OrderSchooterTests(String orderButton, String name, String surname, String adress, String phoneNumber,
@@ -47,7 +47,7 @@ public class OrderSchooterTests extends BaseTest {
                     // Короткие данные
                     {"верхняя кнопка заказа", "Ян", "Ши", "Бийск", "83823315149", "сутки", "black", "1"},
                     // Длинные данные
-                    {"нижняя кнопка заказа", "Гайнельмухаммет",
+                    {"верхняя кнопка заказа", "Гайнельмухаммет",
                             "ЧеловекСОченьДлиннойФамилиейЧеловекСОченьДлиннойФамилиейЧеловекСОченьДлиннойФамилией",
                             "РФ, г. Новосибирск, ул. Демакова, д. 12а, кв. 456",
                             "+791347295468", "семеро суток", "grey",
@@ -55,6 +55,8 @@ public class OrderSchooterTests extends BaseTest {
                                     "Длинный комментарий для курьера. Длинный комментарий для курьера." +
                                     "Длинный комментарий для курьера. Длинный комментарий для курьера."
                     },
+
+
             };
     }
 
@@ -67,11 +69,12 @@ public class OrderSchooterTests extends BaseTest {
     // Тест: проверяем весь флоу позитивного сценария заказа самоката
     @Test
     public void checkOrderSchooterValidData_expectSchooterIsOrdered() {
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2)); // Неявное ожидание
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3)); // Неявное ожидание
         // Создаем экземпляр класса главной страницы
         MainPage mainPage = new MainPage(driver);
         mainPage.open(); // Открываем страницу в браузере
         mainPage.clickOrderButton(orderButton); // Кликаем по кнопке заказа самоката (верхней или нижней)
+
         // Создаем экземпляр класса страницы формы заказа
         OrderFormPage orderFormPage = new OrderFormPage(driver);
         orderFormPage.isOrderFormHeaderVisible(); // Проверяем, отображается ли заголовок формы заказа
@@ -81,6 +84,7 @@ public class OrderSchooterTests extends BaseTest {
         orderFormPage.chooseMetroStation(); // Выбираем станцию метро
         orderFormPage.enterValidPhoneNumber(phoneNumber); // Вводим корректный номер телефона
         orderFormPage.clickContinueButton(); // Кликаем на кнопку продолжения
+
         // Создаем экземпляр класса страницы про аренду
         RentPage rentPage = new RentPage(driver);
         rentPage.isRentHeaderVisible(); // Проверяем, отображается ли заголовок про аренду
@@ -89,23 +93,19 @@ public class OrderSchooterTests extends BaseTest {
         rentPage.chooseColour(colour); // Выбираем цвет самоката
         rentPage.enterComment(comment); // Вводим комментарий
         rentPage.clickOrderButton(); // Кликаем по кнопке подтверждения заказа
+
         // Создаем экземпляр класса окна с вопросом о подтверждении заказа
         ConfirmQuestionPage confirmQuestionPage = new ConfirmQuestionPage(driver);
         confirmQuestionPage.isConfirmQuestionVisible(); // Проверяем, отображается ли вопрос о подтверждении заказа
-        // Проверяем активность кнопки подтверждения заказа
-        System.out.println(confirmQuestionPage.isConfirmButtonEnable());
-        Assert.assertTrue("Expected: order confirmation button is active",
-                confirmQuestionPage.isConfirmButtonEnable());
+        confirmQuestionPage.isConfirmButtonEnable(); // Проверяем активность кнопки подтверждения заказа
         confirmQuestionPage.clickConfirmButton(); // Кликаем на кнопку подтверждения заказа
+
         // Создаем экземпляр класса окна с сообщением об успешном создании заказа
         SuccessOrderCreationPage successOrderCreationPage = new SuccessOrderCreationPage(driver);
-
         // Проверяем, отображается ли сообщение об успешном создании заказа:
-        // Сохраняем фактический результат в переменную
-        actualResult = successOrderCreationPage.isSuccessOrderCreationMessageVisible();
-        // Проверяем, соответствует ли фактический результат ожидаемому
+        actual = successOrderCreationPage.isSuccessOrderCreationMessageVisible();
         Assert.assertTrue("Expected: a message is displayed that the order was created successfully ",
-                actualResult);
+                actual);
     }
 
      // Закрываем браузер

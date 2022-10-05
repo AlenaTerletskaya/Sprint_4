@@ -3,6 +3,11 @@ package page_object;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.rmi.server.ExportException;
 
 // Создаем класс страницы с формой заказа OrderFormPage
 public class OrderFormPage {
@@ -64,10 +69,14 @@ public class OrderFormPage {
 
     // Метод кликает по кнопке "Далее"
     public void clickContinueButton() {
+        waitElementToBeClicable(CONTINUE_BUTTON);
         driver.findElement(CONTINUE_BUTTON).click();
     }
 
-
-
+    // Явное ожидание кликабельности элемента с данным локатором
+    public void waitElementToBeClicable(By elementLocator) {
+        new WebDriverWait(driver, 3)
+                .until(ExpectedConditions.elementToBeClickable(driver.findElement(elementLocator)));
+    }
 
 }
