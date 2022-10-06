@@ -53,7 +53,8 @@ public class RentPage {
     public void chooseRentalPeriod(String rentalPeriod) {
         driver.findElement(RENTAL_PERIOD_FIELD).click(); // Кликаем на поле выбора срока аренды
         // Выбираем срок аренды из выпадающего списка и кликаем на него
-        this.rentalPeriodDropdownOption = By.xpath(".//div[text()='" + rentalPeriod + "']");
+        String rentalPeriodLocator = String.format(".//div[text()='%s']", rentalPeriod);
+        this.rentalPeriodDropdownOption = By.xpath(rentalPeriodLocator);
         driver.findElement(rentalPeriodDropdownOption).click();
     }
 

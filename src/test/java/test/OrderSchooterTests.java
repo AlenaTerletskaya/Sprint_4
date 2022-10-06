@@ -1,15 +1,12 @@
 package test;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import page_object.*;
 
 import java.time.Duration;
-
 
 @RunWith(Parameterized.class)
 // Класс для тестирования заказа самоката
@@ -60,12 +57,6 @@ public class OrderSchooterTests extends BaseTest {
             };
     }
 
-    // Запускаем браузер
-    @Before
-    public void start() {
-        setUp();
-    }
-
     // Тест: проверяем весь флоу позитивного сценария заказа самоката
     @Test
     public void checkOrderSchooterValidData_expectSchooterIsOrdered() {
@@ -97,7 +88,6 @@ public class OrderSchooterTests extends BaseTest {
         // Создаем экземпляр класса окна с вопросом о подтверждении заказа
         ConfirmQuestionPage confirmQuestionPage = new ConfirmQuestionPage(driver);
         confirmQuestionPage.isConfirmQuestionVisible(); // Проверяем, отображается ли вопрос о подтверждении заказа
-        confirmQuestionPage.isConfirmButtonEnable(); // Проверяем активность кнопки подтверждения заказа
         confirmQuestionPage.clickConfirmButton(); // Кликаем на кнопку подтверждения заказа
 
         // Создаем экземпляр класса окна с сообщением об успешном создании заказа
@@ -106,12 +96,6 @@ public class OrderSchooterTests extends BaseTest {
         actual = successOrderCreationPage.isSuccessOrderCreationMessageVisible();
         Assert.assertTrue("Expected: a message is displayed that the order was created successfully ",
                 actual);
-    }
-
-     // Закрываем браузер
-    @After
-    public void finish() {
-        cleanUp();
     }
 
 }

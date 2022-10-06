@@ -9,7 +9,7 @@ public class SuccessOrderCreationPage {
     // Поля класса
     private final WebDriver driver; // Поле driver
     // Локатор сообщения об успешном создании заказа
-    private static final By SUCCESS_ORDER_CREATION_MESSAGE = By.cssSelector("div.Order_Modal__YZ-d3");
+    private static final By SUCCESS_ORDER_CREATION_MESSAGE = By.xpath(".//div[text()='Заказ оформлен']");
 
     // Конструктор класса SuccessOrderCreationPage
     public SuccessOrderCreationPage(WebDriver driver) {

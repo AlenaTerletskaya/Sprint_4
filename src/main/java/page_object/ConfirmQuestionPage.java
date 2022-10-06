@@ -1,7 +1,7 @@
 package page_object;
 
-import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -11,11 +11,9 @@ public class ConfirmQuestionPage {
     // Поля класса
     private final WebDriver driver; // Поле driver
     // Локатор вопроса о подтверждении заказа
-    private static final By CONFIRM_QUESTION = By.cssSelector("div.Order_ModalHeader__3FDaJ");
+    private static final By CONFIRM_QUESTION = By.xpath(".//div[text()='Хотите оформить заказ?']");
     // Локатор кнопки подтверждения заказа
-//    private static final By CONFIRM_BUTTON = By.xpath(".//button[text()='Да']");
-    private static final By CONFIRM_BUTTON = By.xpath(".//div[contains(@class,'Order_Modal__YZ-d3')]//div[contains(@class,'Order_Buttons__1xGrp')]//button[not(contains(@class, 'Button_Inverted__3IF-i'))]");
-    private static final By REJECT_BUTTON = By.xpath(".//button[text()='Нет']");
+    private static final By CONFIRM_BUTTON = By.xpath(".//button[text()='Да']");
 
     // Конструктор класса ConfirmQuestionPage
     public ConfirmQuestionPage(WebDriver driver) {
@@ -25,11 +23,6 @@ public class ConfirmQuestionPage {
     // Метод проверяет, отображается ли вопрос о подтверждении заказа
     public void isConfirmQuestionVisible() {
         driver.findElement(CONFIRM_QUESTION).isDisplayed();
-    }
-
-   // Метод проверяет, активна ли кнопка подтверждения заказа
-    public boolean isConfirmButtonEnable() {
-        return driver.findElement(CONFIRM_BUTTON).isEnabled();
     }
 
     // Метод кликает по кнопке подтверждения заказа
