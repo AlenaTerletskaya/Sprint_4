@@ -4,28 +4,41 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 // Создаем класс главной страницы MainPage
-public class MainPage {
+public class MainPage extends BasePage {
 
     // Поля класса
-    private final WebDriver driver; // Поле driver
-    private final static String pageURL = "https://qa-scooter.praktikum-services.ru/"; // URL страницы
     // Локатор верхней кнопки заказа самоката
-    private static final By UPPER_ORDER_BUTTON = By.xpath(".//div[@class='Header_Nav__AGCXC']/button[text()='Заказать']");
+    private static final By UPPER_ORDER_BUTTON =
+            By.xpath(".//div[@class='Header_Nav__AGCXC']/button[text()='Заказать']");
     // Локатор нижней кнопки заказа самоката
-    private static final By LOWER_ORDER_BUTTON = By.xpath(".//div[@class='Home_FinishButton__1_cWm']/button[text()='Заказать']");
+    private static final By LOWER_ORDER_BUTTON =
+            By.xpath(".//div[@class='Home_FinishButton__1_cWm']/button[text()='Заказать']");
+    // Локатор кнопки проверки статуса заказа
+    private static final By STATUS_ORDER_BUTTON = By.cssSelector("button.Header_Link__1TAG7");
+    // Локатор поля для ввода номера заказа
+    private static final By ORDER_NUMBER_FIELD = By.xpath(".//input[@placeholder='Введите номер заказа']");
+    // Локатор кнопки "Go!"
+    private static final By GO_BUTTON = By.xpath(".//button[text()='Go!']");
+
 
     // Конструктор класса MainPage
     public MainPage(WebDriver driver) {
-        this.driver = driver; // Инициализировали поле driver
+        super(driver);
     }
 
-    // Метод открывает страницу в браузере
+    // Геттер возвращает локатор поля для ввода номера заказа
+    public By getOrderNumberFieldLocator() {
+        return ORDER_NUMBER_FIELD;
+    }
+
+
+
+
+    // Метод открывает главную страницу в браузере
     public void open() {
-        driver.get(pageURL);
+        driver.get(BasePage.getMainPageUrl());
     }
 
     // Метод кликает на вопрос
@@ -71,11 +84,19 @@ public class MainPage {
         }
     }
 
-    // Явное ожидание кликабельности элемента
-    public void waitElementToBeClicable(WebElement element) {
-        new WebDriverWait(driver, 3)
-                .until(ExpectedConditions.elementToBeClickable(element));
+    // Метод кликает по кнопке проверки статуса заказа
+    public void clickStatusOrderButton() {
+        driver.findElement(STATUS_ORDER_BUTTON).click();
     }
 
+    // Метод вводит неправильный номер заказа
+    public void enterWrongOrderNumber(String wrongOrderNumber) {
+        driver.findElement(ORDER_NUMBER_FIELD).sendKeys(wrongOrderNumber);
+    }
+
+    // Метод кликает по кнопке "Go!"
+    public void clickGoButton() {
+        driver.findElement(GO_BUTTON).click();
+    }
 }
 

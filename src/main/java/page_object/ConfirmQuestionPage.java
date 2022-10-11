@@ -2,14 +2,10 @@ package page_object;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 // Создаем класс окна с вопросом о подтверждении заказа
-public class ConfirmQuestionPage {
+public class ConfirmQuestionPage extends BasePage {
 
-    // Поля класса
-    private final WebDriver driver; // Поле driver
     // Локатор вопроса о подтверждении заказа
     private static final By CONFIRM_QUESTION = By.xpath(".//div[text()='Хотите оформить заказ?']");
     // Локатор кнопки подтверждения заказа
@@ -17,7 +13,7 @@ public class ConfirmQuestionPage {
 
     // Конструктор класса ConfirmQuestionPage
     public ConfirmQuestionPage(WebDriver driver) {
-        this.driver = driver; // Инициализировали поле driver
+        super(driver);
     }
 
     // Метод проверяет, отображается ли вопрос о подтверждении заказа
@@ -31,11 +27,7 @@ public class ConfirmQuestionPage {
         driver.findElement(CONFIRM_BUTTON).click();
     }
 
-    // Явное ожидание кликабельности элемента с данным локатором
-    public void waitElementToBeClicable(By elementLocator) {
-        new WebDriverWait(driver, 3)
-                .until(ExpectedConditions.elementToBeClickable(driver.findElement(elementLocator)));
-    }
+
 
 }
 

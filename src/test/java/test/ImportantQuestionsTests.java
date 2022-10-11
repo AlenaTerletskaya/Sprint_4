@@ -38,8 +38,8 @@ public class ImportantQuestionsTests extends BaseTest{
     // При нажатии на вопрос → открывается соответствующий текст
     @Test
     public void checkClickQuestion_expectTextIsDisplayed() {
+        super.implicitlyWait(5); // Неявное ожидание
 
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5)); // Неявное ожидание
         MainPage mainPage = new MainPage(driver); // Создаем экземпляр класса главной страницы
         mainPage.open(); // Открываем страницу в браузере
         mainPage.clickQuestion(questionNumber); // Кликаем на вопрос

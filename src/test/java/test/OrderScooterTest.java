@@ -6,11 +6,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import page_object.*;
 
-import java.time.Duration;
-
 @RunWith(Parameterized.class)
 // Класс для тестирования заказа самоката
-public class OrderSchooterTests extends BaseTest {
+public class OrderScooterTest extends BaseTest {
 
     // Поля класса
     private final String orderButton; // Kнопка заказа (верхняя или нижняя)
@@ -24,8 +22,8 @@ public class OrderSchooterTests extends BaseTest {
     private boolean actual; // Ожидаемый результат
 
     // Конструктор с параметрами
-    public OrderSchooterTests(String orderButton, String name, String surname, String adress, String phoneNumber,
-                              String rentalPeriod, String colour, String comment)
+    public OrderScooterTest(String orderButton, String name, String surname, String adress, String phoneNumber,
+                            String rentalPeriod, String colour, String comment)
     {
         this.orderButton = orderButton;
         this.name = name;
@@ -46,7 +44,7 @@ public class OrderSchooterTests extends BaseTest {
                     // Длинные данные
                     {"верхняя кнопка заказа", "Гайнельмухаммет",
                             "ЧеловекСОченьДлиннойФамилиейЧеловекСОченьДлиннойФамилиейЧеловекСОченьДлиннойФамилией",
-                            "РФ, г. Новосибирск, ул. Демакова, д. 12а, кв. 456",
+                            "РФ, г. Новосибирск, ул. Дема, адрес в 49 символов",
                             "+791347295468", "семеро суток", "grey",
                             "Длинный комментарий для курьера. Длинный комментарий для курьера. " +
                                     "Длинный комментарий для курьера. Длинный комментарий для курьера." +
@@ -59,8 +57,9 @@ public class OrderSchooterTests extends BaseTest {
 
     // Тест: проверяем весь флоу позитивного сценария заказа самоката
     @Test
-    public void checkOrderSchooterValidData_expectSchooterIsOrdered() {
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3)); // Неявное ожидание
+    public void checkOrderScooterValidData_expectSchooterIsOrdered() {
+        super.implicitlyWait(3); // Неявное ожидание
+
         // Создаем экземпляр класса главной страницы
         MainPage mainPage = new MainPage(driver);
         mainPage.open(); // Открываем страницу в браузере
@@ -69,11 +68,11 @@ public class OrderSchooterTests extends BaseTest {
         // Создаем экземпляр класса страницы формы заказа
         OrderFormPage orderFormPage = new OrderFormPage(driver);
         orderFormPage.isOrderFormHeaderVisible(); // Проверяем, отображается ли заголовок формы заказа
-        orderFormPage.enterValidName(name); // Вводим корректное имя
-        orderFormPage.enterValidSurname(surname); // Вводим корректную фамилию
-        orderFormPage.enterValidAdress(adress); // Вводим корректный адрес
-        orderFormPage.chooseMetroStation(); // Выбираем станцию метро
-        orderFormPage.enterValidPhoneNumber(phoneNumber); // Вводим корректный номер телефона
+        orderFormPage.enterData(orderFormPage.getNameLocator(), name); // Вводим корректное имя
+        orderFormPage.enterData(orderFormPage.getSurnameLocator(), surname); // Вводим корректную фамилию
+        orderFormPage.enterData(orderFormPage.getAdressLocator(), adress); // Вводим корректный адрес
+        orderFormPage. chooseMetroStation(); // Выбираем станцию метро
+        orderFormPage.enterData(orderFormPage.getPhoneNumberLocator(), phoneNumber); // Вводим корректный номер телефона
         orderFormPage.clickContinueButton(); // Кликаем на кнопку продолжения
 
         // Создаем экземпляр класса страницы про аренду
@@ -82,7 +81,7 @@ public class OrderSchooterTests extends BaseTest {
         rentPage.enterValidDeliveryDate(); // Вводим корректную дату доставки
         rentPage.chooseRentalPeriod(rentalPeriod); // Выбираем срок ареды
         rentPage.chooseColour(colour); // Выбираем цвет самоката
-        rentPage.enterComment(comment); // Вводим комментарий
+        orderFormPage.enterData(rentPage.getCommentLocator(), comment); // Вводим комментарий
         rentPage.clickOrderButton(); // Кликаем по кнопке подтверждения заказа
 
         // Создаем экземпляр класса окна с вопросом о подтверждении заказа

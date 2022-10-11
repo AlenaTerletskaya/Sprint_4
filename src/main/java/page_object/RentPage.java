@@ -3,37 +3,40 @@ package page_object;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 // Создаем класс страницы про аренду RentPage
-public class RentPage {
+public class RentPage extends BasePage {
 
     // Поля класса
-    private final WebDriver driver; // Поле driver
     // Локатор заголовка страницы про аренду
     private static final By RENT_HEADER = By.cssSelector("div.Order_Header__BZXOb");
     // Локатор поля выбора даты доставки
     private static final By DELIVERY_DATE_FIELD = By.cssSelector("input[placeholder='* Когда привезти самокат']");
     // Локатор поля выбора срока аренды
     private static final By RENTAL_PERIOD_FIELD = By.cssSelector("div.Dropdown-root");
-    // Локатор пункта выпадающего меню о сроке аренды
-    private By rentalPeriodDropdownOption;
-    // Локатор чек-бокса c цветом самоката
-    private By colourCheckBox;
+    private By rentalPeriodDropdownOption; // Локатор пункта выпадающего меню о сроке аренды
+    private By colourCheckBox; // Локатор чек-бокса c цветом самоката
     // Локатор поля для комментария
     private static final By COMMENT_FIELD = By.cssSelector("input[placeholder='Комментарий для курьера']");
     // Локатор кнопки подтверждения заказа
     private static final By ORDER_CONFIRM_BUTTON =
             By.xpath(".//div[@class='Order_Buttons__1xGrp']/button[text()='Заказать']");
 
+
     // Конструктор класса RentPage
     public RentPage(WebDriver driver) {
-        this.driver = driver; // Инициализировали поле driver
+        super(driver);
     }
+
+
+    // Геттер возвращает локатор поля ввода комментария
+    public By getCommentLocator() {
+        return COMMENT_FIELD;
+    }
+
 
     // Метод проверяет, отображается ли заголовок про аренду
     public void isRentHeaderVisible() {
@@ -64,20 +67,10 @@ public class RentPage {
         driver.findElement(colourCheckBox).click();
     }
 
-    // Метод вводит комментарий
-    public void enterComment(String comment) {
-        driver.findElement(COMMENT_FIELD).sendKeys(comment);
-    }
-
     // Метод кликает по кнопке подтверждения заказа
     public void clickOrderButton() {
         waitElementToBeClicable(ORDER_CONFIRM_BUTTON);
         driver.findElement(ORDER_CONFIRM_BUTTON).click(); // Кликаем по кнопке подтверждения заказа
     }
 
-    // Явное ожидание кликабельности элемента с данным локатором
-    public void waitElementToBeClicable(By elementLocator) {
-        new WebDriverWait(driver, 3)
-                .until(ExpectedConditions.elementToBeClickable(driver.findElement(elementLocator)));
-    }
 }
